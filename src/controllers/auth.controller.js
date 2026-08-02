@@ -80,6 +80,11 @@ async function userLoginController(req, res) {
 
 }
 
+/**
+* - User Logout Controller
+* - POST /api/auth/logout
+*/
+
 module.exports = {
     userRegisterController,
     userLoginController
