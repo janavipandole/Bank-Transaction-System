@@ -1,4 +1,3 @@
-require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -21,11 +20,12 @@ transporter.verify((error, success) => {
     }
 });
 
+
 // Function to send email
 const sendEmail = async (to, subject, text, html) => {
     try {
         const info = await transporter.sendMail({
-            from: `"Bank Transaction System" <${process.env.EMAIL_USER}>`, // sender address
+            from: `"Backend Ledger" <${process.env.EMAIL_USER}>`, // sender address
             to, // list of receivers
             subject, // Subject line
             text, // plain text body
@@ -39,26 +39,27 @@ const sendEmail = async (to, subject, text, html) => {
     }
 };
 
-const sendRegistrationEmail = async (userEmail, name) => {
-    const subject = 'Welcome to Bank Transaction System';
-    const text = `Hello ${name},\n\nThank you for registering with our Bank Transaction System. We are excited to have you on board!\n\nBest regards,\nBank Transaction System Team`;
-    const html = `<p>Hello ${name},</p><p>Thank you for registering with our <strong>Bank Transaction System</strong>. We are excited to have you on board!</p><p>Best regards,<br/>Bank Transaction System Team</p>`;
+
+async function sendRegistrationEmail(userEmail, name) {
+    const subject = 'Welcome to Backend Ledger!';
+    const text = `Hello ${name},\n\nThank you for registering at Backend Ledger. We're excited to have you on board!\n\nBest regards,\nThe Backend Ledger Team`;
+    const html = `<p>Hello ${name},</p><p>Thank you for registering at Backend Ledger. We're excited to have you on board!</p><p>Best regards,<br>The Backend Ledger Team</p>`;
 
     await sendEmail(userEmail, subject, text, html);
 }
 
-async function sendTransactionEmail(userEmail, name, amount, toAccount, transactionId) {
-    const subject = 'Transaction Notification';
-    const text = `Hello ${name},\n\nYour transaction of amount ${amount} to account ${toAccount} has been successfully processed. Transaction ID: ${transactionId}\n\nBest regards,\nBank Transaction System Team`;
-    const html = `<p>Hello ${name},</p><p>Your transaction of amount <strong>${amount}</strong> to account <strong>${toAccount}</strong> has been successfully processed.</p><p>Transaction ID: <strong>${transactionId}</strong></p><p>Best regards,<br/>Bank Transaction System Team</p>`;
+async function sendTransactionEmail(userEmail, name, amount, toAccount) {
+    const subject = 'Transaction Successful!';
+    const text = `Hello ${name},\n\nYour transaction of $${amount} to account ${toAccount} was successful.\n\nBest regards,\nThe Backend Ledger Team`;
+    const html = `<p>Hello ${name},</p><p>Your transaction of $${amount} to account ${toAccount} was successful.</p><p>Best regards,<br>The Backend Ledger Team</p>`;
 
     await sendEmail(userEmail, subject, text, html);
 }
 
-async function sendTransactionFailureEmail(userEmail, name, amount, toAccount, transactionId) {
+async function sendTransactionFailureEmail(userEmail, name, amount, toAccount) {
     const subject = 'Transaction Failed';
-    const text = `Hello ${name},\n\nYour transaction of amount ${amount} to account ${toAccount} has failed. Transaction ID: ${transactionId}\n\nBest regards,\nBank Transaction System Team`;
-    const html = `<p>Hello ${name},</p><p>Your transaction of amount <strong>${amount}</strong> to account <strong>${toAccount}</strong> has failed.</p><p>Transaction ID: <strong>${transactionId}</strong></p><p>Best regards,<br/>Bank Transaction System Team</p>`;
+    const text = `Hello ${name},\n\nWe regret to inform you that your transaction of $${amount} to account ${toAccount} has failed. Please try again later.\n\nBest regards,\nThe Backend Ledger Team`;
+    const html = `<p>Hello ${name},</p><p>We regret to inform you that your transaction of $${amount} to account ${toAccount} has failed. Please try again later.</p><p>Best regards,<br>The Backend Ledger Team</p>`;
 
     await sendEmail(userEmail, subject, text, html);
 }
